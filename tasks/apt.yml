@@ -1,0 +1,24 @@
+---
+
+- name: adding elastic apt source key
+  apt_key:
+    url: "{{ elastic_apt_key_url }}"
+    state: present
+  become: yes
+  tags:
+    - apt
+
+- name: adding elastic apt repo to list
+  template:
+    src: elastic-5.x.list.j2
+    dest: "{{ elastic_apt_sources_list_path }}"
+  become: yes
+  tags:
+    - apt
+
+- name: updating apt-cache
+  apt:
+    update_cache: yes
+  become: yes
+  tags:
+    - apt

@@ -1,0 +1,50 @@
+---
+
+- name: installing elasticsearch
+  apt:
+    name: elasticsearch={{ es_version }}
+    state: present
+  become: yes
+  tags:
+    - elasticsearch
+
+- name: creating elasticsearch paths
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+  with_items:
+    - "{{ es_yml['path.data'] }}"
+    - "{{ es_yml['path.logs'] }}"
+  become: yes
+  tags:
+    - elasticsearch
+
+- name: configuring elasticsearch
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    owner: elasticsearch
+    group: elasticsearch
+    mode: 0644
+  with_items:
+    - src: elasticsearch/elasticsearch.yml.j2
+      dest: /etc/elasticsearch/elasticsearch.yml
+    - src: elasticsearch/jvm.options.j2
+      dest: /etc/elasticsearch/jvm.options
+    - src: elasticsearch/log4j2.properties.j2
+      dest: /etc/elasticsearch/log4j2.properties
+  become: yes
+  tags:
+    - elasticsearch
+
+- name: starting elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes
+  become: yes
+  tags:
+    - elasticsearch

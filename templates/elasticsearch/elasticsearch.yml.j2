@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+
+# ======================== Elasticsearch Configuration =========================
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html
+
+# ---------------------------------- Cluster -----------------------------------
+cluster.name: {{ es_yml['cluster.name'] }}
+
+{% if es_yml['node.name'] -%}
+# ------------------------------------ Node ------------------------------------
+node.name: {{ es_yml['node.name'] }}
+{% if es_yml['node.attr.rack'] -%}
+node.attr.rack: {{ es_yml['node.attr.rack'] }}
+{%- endif %}
+{%- endif %}
+
+# ----------------------------------- Paths ------------------------------------
+path.data: {{ es_yml['path.data'] }}
+path.logs: {{ es_yml['path.logs'] }}
+
+# ----------------------------------- Memory -----------------------------------
+bootstrap.memory_lock: {{ es_yml['bootstrap.memory_lock'] }}
+
+# ---------------------------------- Network -----------------------------------
+network.host: {{ es_yml['network.host'] }}
+http.port: {{ es_yml['http.port'] }}
+
+{% if es_yml['discovery.zen.ping.unicast.hosts'] -%}
+# --------------------------------- Discovery ----------------------------------
+discovery.zen.ping.unicast.hosts: {{ es_yml['discovery.zen.ping.unicast.hosts'] }}
+{% if es_yml['discovery.zen.minimum_master_nodes'] -%}
+discovery.zen.minimum_master_nodes: {{ es_yml['discovery.zen.minimum_master_nodes'] }}
+{%- endif %}
+{%- endif %}
+
+{% if es_yml['gateway.recover_after_nodes'] -%}
+# ---------------------------------- Gateway -----------------------------------
+gateway.recover_after_nodes: {{ es_yml['gateway.recover_after_nodes'] }}
+{%- endif %}
+
+# ---------------------------------- Various -----------------------------------
+action.destructive_requires_name: {{ es_yml['action.destructive_requires_name'] }}

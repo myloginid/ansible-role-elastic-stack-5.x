@@ -1,0 +1,45 @@
+---
+
+- name: apt installing java requirements
+  apt:
+    name: software-properties-common
+    state: latest
+  become: yes
+  tags:
+    - java 8
+
+- name: adding java repo
+  apt_repository:
+    repo: "ppa:webupd8team/java"
+  become: yes
+  tags:
+    - java 8
+
+- name: updating apt cache
+  apt:
+    update_cache: yes
+  become: yes
+  tags:
+    - java 8
+
+- name: accepting java licesnse
+  debconf:
+    name: "oracle-java8-installer"
+    question: "shared/accepted-oracle-license-v1-1"
+    value: "true"
+    vtype: select
+  become: yes
+  tags:
+    - java 8
+
+- name: installing java8
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+  become: yes
+  tags:
+    - java 8

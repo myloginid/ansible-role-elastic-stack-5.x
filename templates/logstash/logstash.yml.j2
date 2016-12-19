@@ -1,0 +1,48 @@
+# {{ ansible_managed }}
+
+# ==================== Logstash Configuration ====================
+# https://www.elastic.co/guide/en/logstash/5.x/logstash-settings-file.html
+
+# ------------  Node identity ------------
+node.name: {{ ls_yml['node.name'] }}
+
+# ------------ Data path ------------------
+path.data: {{ ls_yml['path.data'] }}
+
+# ------------ Pipeline Settings --------------
+pipeline.workers: {{ ls_yml['pipeline.workers'] }}
+pipeline.output.workers: {{ ls_yml['pipeline.output.workers'] }}
+pipeline.batch.size: {{ ls_yml['pipeline.batch.size'] }}
+pipeline.batch.delay: {{ ls_yml['pipeline.batch.delay'] }}
+pipeline.unsafe_shutdown: {{ ls_yml['pipeline.unsafe_shutdown'] }}
+
+# ------------ Pipeline Configuration Settings --------------
+path.config: {{ ls_yml['path.config'] }}
+config.string: {{ ls_yml['config.string'] }}
+config.test_and_exit: {{ ls_yml['config.test_and_exit'] }}
+config.reload.automatic: {{ ls_yml['config.reload.automatic'] }}
+config.reload.interval: {{ ls_yml['config.reload.interval'] }}
+config.debug: {{ ls_yml['config.debug'] }}
+
+# ------------ Queuing Settings --------------
+queue.type: {{ ls_yml['queue.type'] }}
+path.queue: {{ ls_yml['path.queue'] }}
+queue.page_capacity: {{ ls_yml['queue.page_capacity'] }}
+queue.max_events: {{ ls_yml['queue.max_events'] }}
+{% if ls_yml['queue.type'] == 'memory' -%}
+queue.max_bytes: {{ ls_yml['queue.max_bytes'] }}
+queue.checkpoint.acks: {{ ls_yml['queue.checkpoint.acks'] }}
+queue.checkpoint.writes: {{ ls_yml['queue.checkpoint.writes'] }}
+queue.checkpoint.interval: {{ ls_yml['queue.checkpoint.interval'] }}
+{%- endif %}
+
+# ------------ Metrics Settings --------------
+http.host: {{ ls_yml['http.host'] }}
+http.port: {{ ls_yml['http.port'] }}
+
+# ------------ Debugging Settings --------------
+log.level: {{ ls_yml['log.level'] }}
+path.logs: {{ ls_yml['path.logs'] }}
+
+# ------------ Other Settings --------------
+path.plugins: {{ ls_yml['path.plugins'] }}

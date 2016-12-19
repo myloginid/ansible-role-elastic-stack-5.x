@@ -1,0 +1,61 @@
+---
+
+- name: installing logstash
+  apt:
+    name: logstash
+    state: present
+  become: yes
+  tags:
+    - logstash
+
+- name: creating logstash paths
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: logstash
+    group: logstash
+  with_items:
+    - "{{ ls_yml['path.data'] }}"
+    - "{{ ls_yml['path.config'] }}"
+    - "{{ ls_yml['path.logs'] }}"
+  become: yes
+  tags:
+    - logstash
+
+- name: configuring logstash
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    owner: logstash
+    group: logstash
+    mode: 0644
+  with_items:
+    - src: logstash/logstash.yml.j2
+      dest: /etc/logstash/logstash.yml
+    - src: logstash/jvm.options.j2
+      dest: /etc/logstash/jvm.options
+    - src: logstash/log4j2.properties.j2
+      dest: /etc/logstash/log4j2.properties
+    - src: logstash/startup.options.j2
+      dest: /etc/logstash/startup.options
+  become: yes
+  tags:
+    - logstash
+
+- name: copying user supplied confd templates
+  template:
+    src: "{{ item }}"
+    dest: "{{ ls_yml['path.config'] }}/{{ item.split('/')[-1][:-3] }}"
+  with_items: "{{ ls_confd_files }}"
+  become: yes
+  tags: logstash
+
+- name: starting logstash
+  service:
+    name: logstash
+    state: started
+    enabled: yes
+  become: yes
+  tags:
+    - logstash
