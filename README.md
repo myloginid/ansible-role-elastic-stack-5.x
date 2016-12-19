@@ -33,17 +33,14 @@ The above will install Java, ES and LS, but not install Beats or Kibana.
 ### Logstash
 
 Logstash is pretty useless without your user defined parser configs. In order to make this role
-generic and flexible, we have gone the route of leaving the `copy` command as an empty dictionary.
-It expects a list of dictionaries that contain a `src` key pointed to a local file and a `dest` key 
-pointed to a destination path to be created with the source file.
+generic and flexible, we have gone the route of leaving the `template` command as an empty list
+of paths. You should define a list of absolute paths to the config files (for now at least).
 
 ```yaml
 - role: elastic-stack-5.x
   install_java: yes
   install_logstash: yes
   ls_confd_files:
-    - src: ansible/files/my-pattern-1.conf
-      dest: /etc/logstash/conf.d/my-pattern-1.conf
-    - src: ansible/files/my-pattern-2.conf
-      dest: /etc/logstash/conf.d/my-pattern-2.conf
+    - /Users/vince/Workspace/test/ansible/templates/ls-conf1.conf
+    - /Users/vince/Workspace/test/ansible/templates/ls-conf2.conf
 ```
