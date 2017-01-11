@@ -1,0 +1,204 @@
+# {{ ansible_managed }}
+
+# ========================= Filebeat Configuration =========================
+# https://www.elastic.co/guide/en/beats/filebeat/index.html
+
+# --------------------------- Filebeat prospectors -----------------------------
+
+filebeat.prospectors:
+  {% for p in fb_full_yml['filebeat.prospectors'] -%}
+  - input_type: {{ p['input_type'] }}
+    paths: {{ p['paths'] }}
+    encoding: {{ p['encoding'] }}]
+    exclude_lines: {{ p['exclude_lines'] }}]
+    include_lines: {{ p['include_lines'] }}]
+    exclude_files: {{ p['exclude_files'] }}]
+    fields_under_root: {{ p['fields_under_root'] }}]
+    ignore_older: {{ p['ignore_older'] }}
+    document_type: {{ p['document_type'] }}
+    scan_frequency: {{ p['scan_frequency'] }}
+    harvester_buffer_size: {{ p['harvester_buffer_size'] }}
+    max_bytes: {{ p['max_bytes'] }}
+
+    {% if p['prospector_is_json'] -%}
+    json.message_key: {{ p['json.message_key'] }}
+    json.keys_under_root: {{ p['json.keys_under_root'] }}
+    json.overwrite_keys: {{ p['json.overwrite_keys'] }}
+    json.add_error_key: {{ p['json.add_error_key'] }}
+    {%- endif %}
+
+    {% if p['prospector_expects_multiline'] -%}
+    multiline.pattern: {{ p['multiline.pattern'] }}
+    multiline.negate: {{ p['multiline.negate'] }}
+    multiline.match: {{ p['multiline.match'] }}
+    multiline.max_lines: {{ p['multiline.max_lines'] }}
+    multiline.timeout: {{ p['multiline.timeout'] }}
+    {%- endif %}
+
+    tail_files: {{ p['tail_files'] }}
+    symlinks: {{ p['symlinks'] }}
+    backoff: {{ p['backoff'] }}
+    max_backoff: {{ p['max_backoff'] }}
+    backoff_factor: {{ p['backoff_factor'] }}
+    harvester_limit: {{ p['harvester_limit'] }}
+
+    close_inactive: {{ p['close_inactive'] }}
+    close_renamed: {{ p['close_renamed'] }}
+    close_removed: {{ p['close_removed'] }}
+    close_eof: {{ p['close_eof'] }}
+
+    clean_inactive: {{ p['clean_inactive'] }}
+    clean_removed: {{ p['clean_removed'] }}
+    close_timeout: {{ p['close_timeout'] }}
+  {%- endfor %}
+
+# ------------------------- Filebeat global options ----------------------------
+
+filebeat.spool_size: {{ fb_full_yml['filebeat.spool_size'] }}
+filebeat.publish_async: {{ fb_full_yml['filebeat.publish_async'] }}
+filebeat.idle_timeout: {{ fb_full_yml['filebeat.idle_timeout'] }}
+{% if fb_full_yml['filebeat.registry_file'] -%}filebeat.registry_file: {{ fb_full_yml['filebeat.registry_file'] }}{%- endif %}
+{% if fb_full_yml['filebeat.config_dir'] -%}filebeat.config_dir: {{ fb_full_yml['filebeat.config_dir'] }}{%- endif %}
+filebeat.shutdown_timeout: {{ fb_full_yml['filebeat.shutdown_timeout'] }}
+
+# -------------------------------- General --------------------------------------
+
+{% if fb_full_yml['name'] -%}name: {{ fb_full_yml['name'] }}{%- endif %}
+{% if fb_full_yml['tags'] -%}tags: {{ fb_full_yml['tags'] }}{%- endif %}
+{% if fb_full_yml['fields'] -%}fields: {{ fb_full_yml['fields'] }}{%- endif %}
+{% if fb_full_yml['fields_under_root'] -%}fields_under_root: {{ fb_full_yml['fields_under_root'] }}{%- endif %}
+{% if fb_full_yml['queue_size'] -%}queue_size: {{ fb_full_yml['queue_size'] }}{%- endif %}
+{% if fb_full_yml['bulk_queue_size'] -%}bulk_queue_size: {{ fb_full_yml['bulk_queue_size'] }}{%- endif %}
+{% if fb_full_yml['max_procs'] -%}max_procs: {{ fb_full_yml['max_procs'] }}{%- endif %}
+
+# -------------------------------- Outputs --------------------------------------
+
+{% if fb_full_yml['output.elasticsearch']['enabled'] -%}
+output.elasticsearch:
+  enabled: true
+  hosts: {{ fb_full_yml['output.elasticsearch']['hosts'] }}
+  compression_level: {{ fb_full_yml['output.elasticsearch']['compression_level'] }}
+  {% if fb_full_yml['output.elasticsearch']['protocol'] -%}protocol: {{ fb_full_yml['output.elasticsearch']['protocol'] }}{%- endif %}
+  {% if fb_full_yml['output.elasticsearch']['username'] -%}username: {{ fb_full_yml['output.elasticsearch']['username'] }}{%- endif %}
+  {% if fb_full_yml['output.elasticsearch']['password'] -%}password: {{ fb_full_yml['output.elasticsearch']['password'] }}{%- endif %}
+  {% if fb_full_yml['output.elasticsearch']['parameters'] -%}parameters: {{ fb_full_yml['output.elasticsearch']['parameters'] }}{%- endif %}
+  worker: {{ fb_full_yml['output.elasticsearch']['worker'] }}
+  index: {{ fb_full_yml['output.elasticsearch']['index'] }}
+  {% if fb_full_yml['output.elasticsearch']['pipeline'] -%}pipeline: {{ fb_full_yml['output.elasticsearch']['pipeline'] }}{%- endif %}
+  {% if fb_full_yml['output.elasticsearch']['path'] -%}path: {{ fb_full_yml['output.elasticsearch']['path'] }}{%- endif %}
+  {% if fb_full_yml['output.elasticsearch']['proxy_url'] -%}proxy_url: {{ fb_full_yml['output.elasticsearch']['proxy_url'] }}{%- endif %}
+  max_retries: {{ fb_full_yml['output.elasticsearch']['max_retries'] }}
+  bulk_max_size: {{ fb_full_yml['output.elasticsearch']['bulk_max_size'] }}
+  timeout: {{ fb_full_yml['output.elasticsearch']['timeout'] }}
+  flush_interval: {{ fb_full_yml['output.elasticsearch']['flush_interval'] }}
+  template.enabled: {{ fb_full_yml['output.elasticsearch']['template.enabled'] }}
+  template.name: {{ fb_full_yml['output.elasticsearch']['template.name'] }}
+  template.path: {{ fb_full_yml['output.elasticsearch']['template.path'] }}
+  template.overwrite: {{ fb_full_yml['output.elasticsearch']['template.overwrite'] }}
+  {% if fb_full_yml['output.elasticsearch']['ssl.enabled'] -%}
+  ssl.enabled: true
+  ssl.verification_mode: full
+  ssl.supported_protocols:
+    - TLSv1.0
+    - TLSv1.1
+    - TLSv1.2
+  ssl.certificate_authorities:
+    - /etc/pki/root/ca.pem
+  ssl.certificate: /etc/pki/client/cert.pem
+  ssl.key: /etc/pki/client/cert.key
+  ssl.key_passphrase: ''
+  ssl.cipher_suites: []
+  ssl.curve_types: []
+  {%- endif %}
+{%- endif %}
+
+{% if fb_full_yml['output.logstash']['enabled'] -%}
+output.logstash:
+  enabled: true
+  hosts: {{ fb_full_yml['output.logstash']['hosts'] }}
+  worker: {{ fb_full_yml['output.logstash']['worker'] }}
+  compression_level: {{ fb_full_yml['output.logstash']['compression_level'] }}
+  loadbalance: {{ fb_full_yml['output.logstash']['loadbalance'] }}
+  pipelining: {{ fb_full_yml['output.logstash']['pipelining'] }}
+  index: {{ fb_full_yml['output.logstash']['index'] }}
+  proxy_url: {{ fb_full_yml['output.logstash']['proxy_url'] }}
+  proxy_use_local_resolver: {{ fb_full_yml['output.logstash']['proxy_use_local_resolver'] }}
+  {% if fb_full_yml['output.logstash']['ssl.enabled'] -%}
+  ssl.enabled: true
+  ssl.verification_mode: full
+  ssl.supported_protocols:
+    - TLSv1.0
+    - TLSv1.1
+    - TLSv1.2
+  ssl.certificate_authorities:
+    - /etc/pki/root/ca.pem
+  ssl.certificate: /etc/pki/client/cert.pem
+  ssl.key: /etc/pki/client/cert.key
+  ssl.key_passphrase: ''
+  ssl.cipher_suites: []
+  ssl.curve_types: []
+  {%- endif %}
+{%- endif %}
+
+{% if fb_full_yml['output.kafka']['enabled'] -%}
+output.kafka:
+  enabled: true
+  hosts: {{ fb_full_yml['output.kafka']['hosts'] }}
+  topic: {{ fb_full_yml['output.kafka']['topic'] }}
+  key: {{ fb_full_yml['output.kafka']['key'] }}
+  worker: {{ fb_full_yml['output.kafka']['worker'] }}
+  max_retries: {{ fb_full_yml['output.kafka']['max_retries'] }}
+  bulk_max_size: {{ fb_full_yml['output.kafka']['bulk_max_size'] }}
+  timeout: {{ fb_full_yml['output.kafka']['timeout'] }}
+  broker_timeout: {{ fb_full_yml['output.kafka']['broker_timeout'] }}
+  channel_buffer_size: {{ fb_full_yml['output.kafka']['channel_buffer_size'] }}
+  keep_alive: {{ fb_full_yml['output.kafka']['keep_alive'] }}
+  compression: {{ fb_full_yml['output.kafka']['compression'] }}
+  max_message_bytes: {{ fb_full_yml['output.kafka']['max_message_bytes'] }}
+  required_acks: {{ fb_full_yml['output.kafka']['required_acks'] }}
+  flush_interval: {{ fb_full_yml['output.kafka']['flush_interval'] }}
+  {% if fb_full_yml['output.kafka']['ssl.enabled'] -%}
+  ssl.enabled: true
+  ssl.verification_mode: full
+  ssl.supported_protocols:
+    - TLSv1.0
+    - TLSv1.1
+    - TLSv1.2
+  ssl.certificate_authorities:
+    - /etc/pki/root/ca.pem
+  ssl.certificate: /etc/pki/client/cert.pem
+  ssl.key: /etc/pki/client/cert.key
+  ssl.key_passphrase: ''
+  ssl.cipher_suites: []
+  ssl.curve_types: []
+  {%- endif %}
+{%- endif %}
+
+{% if fb_full_yml['output.file']['enabled'] -%}
+output.file:
+  enabled: true
+  path: {{ fb_full_yml['output.file']['path'] }}
+  filename: {{ fb_full_yml['output.file']['filename'] }}
+  rotate_every_kb: {{ fb_full_yml['output.file']['rotate_every_kb'] }}
+  number_of_files: {{ fb_full_yml['output.file']['number_of_files'] }}
+{%- endif %}
+
+{% if fb_full_yml['output.console']['enabled'] -%}
+output.console:
+  enabled: true
+  pretty: {{ fb_full_yml['output.console']['pretty'] }}
+{%- endif %}
+
+# --------------------------------- Paths --------------------------------------
+
+path.home: {{ fb_full_yml['path.home'] }}
+path.config: {{ fb_full_yml['path.config'] }}
+path.data: {{ fb_full_yml['path.data'] }}
+path.logs: {{ fb_full_yml['path.logs'] }}
+
+# -------------------------------- Logging --------------------------------------
+
+logging.level: {{ fb_full_yml['logging.level'] }}
+logging.metrics.enabled: {{ fb_full_yml['logging.metrics.enabled'] }}
+logging.metrics.period: {{ fb_full_yml['logging.metrics.period'] }}
+logging.to_files: {{ fb_full_yml['logging.to_files'] }}

@@ -7,6 +7,7 @@ An Ansible role for Ubuntu 14.04 that installs
 - Logstash
 - Beats
 - Kibana
+- XPack
 
 ## Usage
 
@@ -44,3 +45,12 @@ of paths. You should define a list of absolute paths to the config files (for no
     - /Users/vince/Workspace/test/ansible/templates/ls-conf1.conf
     - /Users/vince/Workspace/test/ansible/templates/ls-conf2.conf
 ```
+
+
+## TODO
+
+- kibana
+- xpack
+- metricbeat
+- packetbeat
+- winlogbeat (?)
