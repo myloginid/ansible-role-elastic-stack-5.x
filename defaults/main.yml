@@ -70,13 +70,151 @@ ls_yml:
   path.logs: /var/log/logstash
   path.plugins: []
 
+ls_startup_opts:
+  java_opts: "-Xms{{ ls_min_heap_size }} -Xmx{{ ls_max_heap_size }} -XX:MaxPermSize"
+
 ls_jvm_options:
   min_heap_size: "{{ ls_min_heap_size }}"
   max_heap_size: "{{ ls_max_heap_size }}"
 
 
-# beats stuff
-install_beats: no
+# filebeat stuff
+install_filebeat: no
+
+fb_full_yml:
+  # prospectors
+  filebeat.prospectors:
+    - input_type: log
+      # control values
+      prospector_is_json: no
+      prospector_expects_multiline: no
+      # config values
+      paths:
+        - /var/log/*.log
+      encoding: utf-8
+      exclude_lines:
+        - ^DBG
+      include_lines:
+        - ^ERR
+        - ^WARN
+      exclude_files:
+        - .gz$
+      fields_under_root: "false"
+      ignore_older: "0"
+      document_type: log
+      scan_frequency: 10s
+      harvester_buffer_size: 16384
+      max_bytes: 10485760
+      json.message_key:
+      json.keys_under_root: "false"
+      json.overwrite_keys: "false"
+      json.add_error_key: "false"
+      multiline.pattern: ^\[
+      multiline.negate: "false"
+      multiline.match: after
+      multiline.max_lines: 500
+      multiline.timeout: 5s
+      tail_files: "false"
+      symlinks: "false"
+      backoff: 1s
+      max_backoff: 10s
+      backoff_factor: 2
+      harvester_limit: 0
+      close_inactive: 5m
+      close_renamed: "false"
+      close_removed: "true"
+      close_eof: "false"
+      clean_inactive: 0
+      clean_removed: "true"
+      close_timeout: 0
+  # global config
+  filebeat.spool_size: 2048
+  filebeat.publish_async: "false"
+  filebeat.idle_timeout: 5s
+  filebeat.registry_file: ~
+  filebeat.config_dir: ~
+  filebeat.shutdown_timeout: 0
+  # shipper config
+  name: ~
+  tags: ~
+  fields: ~
+  fields_under_root: ~
+  queue_size: ~
+  bulk_queue_size: ~
+  max_procs: ~
+  # output configs
+  output.elasticsearch:
+    enabled: no
+    hosts:
+      - localhost:9200
+    compression_level: 0
+    protocol: ~
+    username: ~
+    password: ~
+    parameters: ~
+    worker: 1
+    index: "{{ client }}"  # `client` is required user defined
+    pipeline: ~
+    path: ~
+    proxy_url: ~
+    max_retries: 3
+    bulk_max_retries: 50
+    timeout: 90
+    flush_interval: 1s
+    template.enabled: "true"
+    template.name: "filebeat"
+    template.path: "/etc/filebeat/filebeat.template.json"
+    template.overwrite: "false"
+    ssl.enabled: "false"
+  output.logstash:
+    enabled: no
+    hosts:
+      - localhost:5044
+    worker: 1
+    compression_level: 3
+    loadbalance: "true"
+    pipelining: 0
+    index: "{{ client }}"  # `client` is required user defined
+    proxy_url: ~
+    proxy_use_local_resolver: "false"
+    ssl.enabled: no
+  output.kafka:
+    enabled: no
+    hosts:
+      - localhost:9092
+    topic: beats
+    key: "{{ client }}"
+    worker: 1
+    max_retries: 3
+    bulk_max_size: 2048
+    timeout: 30s
+    broker_timeout: 10s
+    channel_buffer_size: 256
+    keep_alive: 0
+    compression: gzip
+    max_message_bytes: 1000000
+    required_acks: 1
+    flush_interval: 1s
+    ssl.enabled: no
+  output.file:
+    enabled: no
+    path: /tmp/filebeat
+    filename: filebeat
+    rotate_every_kb: 10000
+    number_of_files: 7
+  output.console:
+    enabled: no
+    pretty: "false"
+  # path info
+  path.home: /usr/share/filebeat
+  path.config: /etc/logstash
+  path.data: /var/lib/filebeat
+  path.logs: /var/log/filebeat
+  # logging
+  logging.level: info
+  logging.metrics.enabled: "true"
+  logging.metrics.period: 30s
+  logging.to_files: "true"
 
 
 # kibana stuff

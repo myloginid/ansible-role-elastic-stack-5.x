@@ -51,6 +51,10 @@
   become: yes
   tags: logstash
 
+- name: generating startup script
+  command: /usr/share/logstash/bin/system-install
+  become: yes
+
 - name: starting logstash
   service:
     name: logstash

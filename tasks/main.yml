@@ -3,8 +3,8 @@
 - include: java.yml
   when: install_java
 
-- include: apt.yml
-  when: install_elasticsearch or install_logstash or install_beats or install_kibana
+- include: elastic-apt.yml
+  when: install_elasticsearch or install_logstash or install_filebeat or install_kibana
 
 - include: elasticsearch.yml
   when: install_elasticsearch or install_kibana
@@ -12,8 +12,8 @@
 - include: logstash.yml
   when: install_logstash
 
-- include: beats.yml
-  when: install_beats
+- include: filebeat.yml
+  when: install_filebeat
 
 - include: kibana.yml
   when: install_kibana
