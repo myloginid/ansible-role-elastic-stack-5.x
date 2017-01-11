@@ -153,7 +153,7 @@ fb_full_yml:
     password: ~
     parameters: ~
     worker: 1
-    index: "{{ client }}"  # `client` is required user defined
+    index: filebeat
     pipeline: ~
     path: ~
     proxy_url: ~
@@ -174,7 +174,7 @@ fb_full_yml:
     compression_level: 3
     loadbalance: "true"
     pipelining: 0
-    index: "{{ client }}"  # `client` is required user defined
+    index: filebeat
     proxy_url: ~
     proxy_use_local_resolver: "false"
     ssl.enabled: no
@@ -183,7 +183,7 @@ fb_full_yml:
     hosts:
       - localhost:9092
     topic: beats
-    key: "{{ client }}"
+    key: filebeat
     worker: 1
     max_retries: 3
     bulk_max_size: 2048
