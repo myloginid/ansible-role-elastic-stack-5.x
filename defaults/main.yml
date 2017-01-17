@@ -13,7 +13,7 @@ elastic_apt_sources_list_path: "/etc/apt/sources.list.d/elastic-{{ elastic_major
 
 # elasticsearch stuff
 install_elasticsearch: no
-es_version: 5.1.1
+es_version: 5.1.2
 es_heap_size: 512m
 
 es_yml:
