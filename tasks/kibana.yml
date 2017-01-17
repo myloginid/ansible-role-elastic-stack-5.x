@@ -1,0 +1,43 @@
+---
+
+- name: installing kibana
+  apt:
+    name: kibana={{ db_version }}
+    state: present
+  become: yes
+  when: kb_version
+  tags:
+    - kibana
+
+- name: installing kibana
+  apt:
+    name: kibana
+    state: latest
+  become: yes
+  when: not kb_version
+  tags:
+    - kibana
+
+- name: configuring kibana
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - src: kibana/kibana.yml.j2
+      dest: /etc/kibana.yml
+  become: yes
+  tags:
+    - kibana
+
+- name: starting kibana
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+  become: yes
+  tags:
+    - kibana

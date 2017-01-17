@@ -13,7 +13,7 @@ elastic_apt_sources_list_path: "/etc/apt/sources.list.d/elastic-{{ elastic_major
 
 # elasticsearch stuff
 install_elasticsearch: no
-es_version: 5.1.2
+es_version: ~
 es_heap_size: 512m
 
 es_yml:
@@ -37,7 +37,7 @@ es_jvm_options:
 
 # logstash stuff
 install_logstash: no
-ls_version: 5.1.1-1
+ls_version: ~
 ls_min_heap_size: 512m
 ls_max_heap_size: 1g
 ls_confd_files: []
@@ -219,3 +219,36 @@ fb_full_yml:
 
 # kibana stuff
 install_kibana: no
+kb_version: ~
+
+kb_yml:
+  server.port: 5601
+  server.host: localhost
+  server.basePath: '""'
+  server.maxPayloadBytes: 1048576
+  server.name: "{{ ansible_hostname }}"
+  elasticsearch.url: http://{{ es_yml['network.host'] }}:{{ es_yml['http.port'] }}
+  elasticsearch.preserveHost: true
+  kibana.index: '".kibana"'
+  kibana.defaultAppId: discover
+  elasticsearch.username: ~
+  elasticsearch.password: ~
+  server.ssl.cert: ~
+  server.ssl.key: ~
+  elasticsearch.ssl.cert: ~
+  elasticsearch.ssl.key: ~
+  elasticsearch.ssl.ca: ~
+  elasticsearch.ssl.verify: ~
+  elasticsearch.pingTimeout: 1500
+  elasticsearch.requestTimeout: 30000
+  elasticsearch.requestHeadersWhitelist: []
+  elasticsearch.customHeaders: {}
+  elasticsearch.shardTimeout: 0
+  elasticsearch.startupTimeout: 5000
+  pid.file: /var/run/kibana.pid
+  logging.dest: stdout
+  logging.silent: "false"
+  logging.quiet: "false"
+  logging.verbose: "false"
+  ops.interval: 5000
+  console.enabled: "true"

@@ -2,9 +2,19 @@
 
 - name: installing logstash
   apt:
-    name: logstash
+    name: logstash={{ ls_version }}
     state: present
   become: yes
+  when: ls_version
+  tags:
+    - logstash
+
+- name: installing logstash
+  apt:
+    name: logstash
+    state: latest
+  become: yes
+  when: not ls_version
   tags:
     - logstash
 
