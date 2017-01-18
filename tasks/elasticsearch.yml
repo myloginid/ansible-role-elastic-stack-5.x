@@ -5,6 +5,16 @@
     name: elasticsearch={{ es_version }}
     state: present
   become: yes
+  when: es_version
+  tags:
+    - elasticsearch
+
+- name: installing elasticsearch
+  apt:
+    name: elasticsearch
+    state: latest
+  become: yes
+  when: not es_version
   tags:
     - elasticsearch
 

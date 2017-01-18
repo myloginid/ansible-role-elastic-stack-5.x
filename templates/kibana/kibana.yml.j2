@@ -1,0 +1,48 @@
+# {{ ansible_managed }}
+
+server.port: {{ kb_yml['server.port'] }}
+server.host: {{ kb_yml['server.host'] }}
+server.basePath: {{ kb_yml['server.basePath'] }}
+server.maxPayloadBytes: {{ kb_yml['server.maxPayloadBytes'] }}
+server.name: {{ kb_yml['server.name'] }}
+
+elasticsearch.url: {{ kb_yml['elasticsearch.url'] }}
+elasticsearch.preserveHost: {{ kb_yml['elasticsearch.preserveHost'] }}
+
+kibana.index: {{ kb_yml['kibana.index'] }}
+kibana.defaultAppId: {{ kb_yml['kibana.defaultAppId'] }}
+
+{% if kb_yml['elasticsearch.username'] and kb_yml['elasticsearch.password'] -%}
+elasticsearch.username: {{ kb_yml['elasticsearch.username'] }}
+elasticsearch.password: {{ kb_yml['elasticsearch.password'] }}
+{%- endif %}
+
+{% if kb_yml['server.ssl.cert'] -%}
+server.ssl.cert: {{ kb_yml['server.ssl.cert'] }}
+server.ssl.key: {{ kb_yml['server.ssl.key'] }}
+{%- endif %}
+
+{% if kb_yml['elasticsearch.ssl.cert'] -%}
+elasticsearch.ssl.cert: {{ kb_yml['elasticsearch.ssl.cert'] }}
+elasticsearch.ssl.key: {{ kb_yml['elasticsearch.ssl.key'] }}
+elasticsearch.ssl.ca: {{ kb_yml['elasticsearch.ssl.ca'] }}
+elasticsearch.ssl.verify: {{ kb_yml['elasticsearch.ssl.verify'] }}
+{%- endif %}
+
+elasticsearch.pingTimeout: {{ kb_yml['elasticsearch.pingTimeout'] }}
+elasticsearch.requestTimeout: {{ kb_yml['elasticsearch.requestTimeout'] }}
+elasticsearch.requestHeadersWhitelist: {{ kb_yml['elasticsearch.requestHeadersWhitelist'] }}
+elasticsearch.customHeaders: {{ kb_yml['elasticsearch.customHeaders'] }}
+elasticsearch.shardTimeout: {{ kb_yml['elasticsearch.shardTimeout'] }}
+elasticsearch.startupTimeout: {{ kb_yml['elasticsearch.startupTimeout'] }}
+
+pid.file: {{ kb_yml['pid.file'] }}
+
+logging.dest: {{ kb_yml['logging.dest'] }}
+logging.silent: {{ kb_yml['logging.silent'] }}
+logging.quiet: {{ kb_yml['logging.quiet'] }}
+logging.verbose: {{ kb_yml['logging.verbose'] }}
+
+ops.interval: {{ kb_yml['ops.interval'] }}
+
+console.enabled: {{ kb_yml['console.enabled'] }}
