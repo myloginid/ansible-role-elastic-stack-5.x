@@ -28,7 +28,7 @@
     mode: 0644
   with_items:
     - src: kibana/kibana.yml.j2
-      dest: /etc/kibana.yml
+      dest: /etc/kibana/kibana.yml
   become: yes
   tags:
     - kibana
