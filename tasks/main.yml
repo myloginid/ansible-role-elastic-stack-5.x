@@ -7,7 +7,7 @@
   when: install_elasticsearch or install_logstash or install_filebeat or install_kibana
 
 - include: elasticsearch.yml
-  when: install_elasticsearch or install_kibana
+  when: install_elasticsearch
 
 - include: logstash.yml
   when: install_logstash
