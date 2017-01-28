@@ -28,6 +28,7 @@
     - "{{ ls_yml['path.data'] }}"
     - "{{ ls_yml['path.config'] }}"
     - "{{ ls_yml['path.logs'] }}"
+    - "{{ ls_yml['path.index_templates'] }}"
   become: yes
   tags:
     - logstash
@@ -53,17 +54,92 @@
   tags:
     - logstash
 
+- name: Install additional Logstash plugins
+  command: ./bin/logstash-plugin install {{ item }}
+  args:
+    chdir: /usr/share/logstash
+  with_items: "{{ ls_plugins }}"
+  become: yes
+  when: ls_install_plugins
+
+- name: Update plugins
+  command: ./bin/logstash-plugin update
+  args:
+    chdir: /usr/share/logstash
+  become: yes
+  when: ls_install_plugins
+
+- name: Create geodb directory
+  file:
+    path: /etc/logstash/geodb
+    state: directory
+    owner: logstash
+    group: logstash
+    mode: 0755
+  become: yes
+  when: ls_install_geoip
+
+- name: Download GeoIP database files
+  get_url:
+    url: "{{ item }}"
+    dest: /etc/logstash/geodb
+    owner: logstash
+    group: logstash
+    force: yes
+  with_items:
+    - "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz"
+  become: yes
+  when: ls_install_geoip
+
+- stat: path=/etc/logstash/geodb/GeoLite2-City.mmdb.gz
+  register: geolitecity_dat_gz
+  when: ls_install_geoip
+- file: path=/etc/logstash/geodb/GeoLite2-City.mmdb state=absent
+  become: yes
+  when: ls_install_geoip
+- name: Unarchive GeoLite2-City.mmdb.gz if present
+  command: gunzip /etc/logstash/geodb/GeoLite2-City.mmdb.gz
+  become: yes
+  become_user: logstash
+  when: ls_install_geoip and geolitecity_dat_gz.stat.exists
+
 - name: copying user supplied confd templates
   template:
     src: "{{ item }}"
     dest: "{{ ls_yml['path.config'] }}/{{ item.split('/')[-1][:-3] }}"
-  with_items: "{{ ls_confd_files }}"
+    owner: logstash
+    group: logstash
+  with_fileglob: "{{ ls_confd_files }}"
   become: yes
-  tags: logstash
+  tags:
+    - logstash
+
+- name: copying user supplied index templates
+  template:
+    src: "{{ item }}"
+    dest: "{{ ls_yml['path.index_templates'] }}/{{ item.split('/')[-1][:-3] }}"
+    owner: logstash
+    group: logstash
+  with_fileglob: "{{ ls_index_template_files }}"
+  become: yes
+  tags:
+    - logstash
+
+- name: copying user supplied provisonal files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ls_yml['path.base'] }}"
+    owner: logstash
+    group: logstash
+  with_items: "{{ ls_provisional_files }}"
+  become: yes
+  tags:
+    - logstash
 
 - name: generating startup script
   command: /usr/share/logstash/bin/system-install
   become: yes
+  become_user: logstash
 
 - name: starting logstash
   service:

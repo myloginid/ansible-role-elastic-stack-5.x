@@ -41,8 +41,14 @@ ls_version: ~
 ls_min_heap_size: 512m
 ls_max_heap_size: 1g
 ls_confd_files: []
+ls_index_template_files: []
+ls_provisional_files: []
+ls_install_geoip: no
+ls_plugins: []
+ls_install_plugins: yes
 
 ls_yml:
+  path.base: /etc/logstash
   node.name: "{{ ansible_hostname }}"
   path.data: /var/lib/logstash
   pipeline.workers: "{{ ansible_processor_count }}"
@@ -51,13 +57,13 @@ ls_yml:
   pipeline.batch.delay: 5
   pipeline.unsafe_shutdown: "false"
   path.config: /etc/logstash/conf.d
-  config.string: ~
+  config.string: ""
   config.test_and_exit: "false"
   config.reload.automatic: "false"
   config.reload.interval: 3
   config.debug: "false"
   queue.type: memory
-  path.queue: ~
+  path.queue: /var/lib/logstash/queue
   queue.page_capacity: 250mb
   queue.max_events: 0
   queue.max_bytes: 1024mb
@@ -65,10 +71,11 @@ ls_yml:
   queue.checkpoint.writes: 1024
   queue.checkpoint.interval: 1000
   http.host: "127.0.0.1"
-  http.port: "9600-9700"
+  http.port: "9600"
   log.level: info
   path.logs: /var/log/logstash
   path.plugins: []
+  path.index_templates: /etc/logstash/index_templates
 
 ls_startup_opts:
   java_opts: "-Xms{{ ls_min_heap_size }} -Xmx{{ ls_max_heap_size }} -XX:MaxPermSize"
