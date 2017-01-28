@@ -41,11 +41,18 @@ You should define a list of fileglobs that will match the templates you want to 
 Copying index templates (for elasticsearch mappings) is also supported via ls_grok_pattern_files.
 Index templates and conf files are handled as j2 templates, and should end with the `.j2` extension.
 
-
-Finally, static provisional files (like grok patterns, etc) may be listed under `ls_provisional_files`.
+Static provisional files (like grok patterns, etc) may be listed under `ls_provisional_files`.
 These files will be copied directly into the base logstash path (usually `/etc/logstash/`).
 The provisional files/directories should be specified individually. They'll be copied directly as is.
 Do not give a fileglob.
+
+Plugins may be installed as well with the `ls_plugins` parameter. The plugin steps can
+lengthen the ansible process *a lot* so if you want to disable it, use `ls_install_plugins: no`
+
+If you want to install the GeoIP2 database, use `ls_install_geoip: yes`. This places the database
+at `/etc/logstash/geodb/GeoLite2-City.mmdb`.<br/>
+**Please note:** Logstash 5 does not support the legacy GeoIP databases we used to use. This is the
+new GeoIP2 database which is formatted differently.
 
 ```yaml
 - role: elastic-stack-5.x
@@ -59,6 +66,11 @@ Do not give a fileglob.
   ls_provisional_files:
     - /path/to/grok/patterns/dir
     - /path/to/dictionary/dir
+  ls_plugins:
+    - logstash-filter-translate
+    - logstash-output-zabbix
+    - logstash-codec-netflow
+  ls_install_geoip: yes
 ```
 
 
