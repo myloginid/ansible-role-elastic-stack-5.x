@@ -227,7 +227,7 @@ fb_full_yml:
 # kibana stuff
 install_kibana: no
 kb_version: ~
-kb_log_path: /var/run/
+kb_log_path: /var/log/kibana
 
 kb_yml:
   server.port: 5601
