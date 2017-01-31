@@ -1,5 +1,11 @@
 ---
 
+- name: Installing HAVEGE (Increases entropy for faster startups)
+  apt:
+    name: haveged
+    state: present
+  become: yes
+
 - name: installing logstash
   apt:
     name: logstash={{ ls_version }}
