@@ -15,6 +15,8 @@ elastic_apt_sources_list_path: "/etc/apt/sources.list.d/elastic-{{ elastic_major
 install_elasticsearch: no
 es_version: ~
 es_heap_size: 512m
+es_plugins: []
+es_install_plugins: yes
 
 es_yml:
   cluster.name: elasticsearch
@@ -227,6 +229,8 @@ fb_full_yml:
 # kibana stuff
 install_kibana: no
 kb_version: ~
+kb_plugins: []
+kb_install_plugins: yes
 
 kb_yml:
   server.port: 5601

@@ -50,6 +50,12 @@
   tags:
     - elasticsearch
 
+- name: Installing Plugins
+  command: "/usr/share/elasticsearch/bin/elasticsearch-plugin install --batch {{ item }}"
+  with_items: "{{ es_plugins }}"
+  become: yes
+  when: es_install_plugins
+
 - name: starting elasticsearch
   service:
     name: elasticsearch

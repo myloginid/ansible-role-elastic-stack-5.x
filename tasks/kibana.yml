@@ -33,6 +33,12 @@
   tags:
     - kibana
 
+- name: Installing Plugins
+  command: "/usr/share/kibana/bin/kibana-plugin install {{ item }}"
+  with_items: "{{ kb_plugins }}"
+  become: yes
+  when: kb_install_plugins
+
 - name: starting kibana
   service:
     name: kibana
