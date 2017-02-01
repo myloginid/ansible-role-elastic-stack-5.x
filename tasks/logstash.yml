@@ -60,20 +60,28 @@
   tags:
     - logstash
 
-- name: Install additional Logstash plugins
+- name: Get currently installed Logstash plugins
+  command: ./bin/logstash-plugin list
+  args:
+    chdir: /usr/share/logstash
+  register: ls_installed_plugins
+  become: yes
+  when: ls_install_plugins
+
+- name: Upgrade existing plugins
+  command: ./bin/logstash-plugin install {{ item }}
+  args:
+    chdir: /usr/share/logstash
+  with_items: "{{ ls_plugins }}"
+  when: ls_install_plugins and item in ls_installed_plugins.stdout_lines
+
+- name: Install new Logstash plugins
   command: ./bin/logstash-plugin install {{ item }}
   args:
     chdir: /usr/share/logstash
   with_items: "{{ ls_plugins }}"
   become: yes
-  when: ls_install_plugins
-
-- name: Update plugins
-  command: ./bin/logstash-plugin update
-  args:
-    chdir: /usr/share/logstash
-  become: yes
-  when: ls_install_plugins
+  when: ls_install_plugins and item not in ls_installed_plugins.stdout_lines
 
 - name: Create geodb directory
   file:
