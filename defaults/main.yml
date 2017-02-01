@@ -231,6 +231,7 @@ install_kibana: no
 kb_version: ~
 kb_plugins: []
 kb_install_plugins: yes
+kb_log_path: /var/log/kibana
 
 kb_yml:
   server.port: 5601
@@ -257,7 +258,7 @@ kb_yml:
   elasticsearch.shardTimeout: 0
   elasticsearch.startupTimeout: 5000
   pid.file: /var/run/kibana.pid
-  logging.dest: stdout
+  logging.dest: /var/log/kibana/kibana.yml
   logging.silent: "false"
   logging.quiet: "false"
   logging.verbose: "false"

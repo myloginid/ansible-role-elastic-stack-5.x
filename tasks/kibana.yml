@@ -33,6 +33,27 @@
   tags:
     - kibana
 
+- name: creating pid file for kibana
+  file:
+    path: "{{ kb_yml['pid.file'] }}"
+    state: touch
+    owner: kibana
+    group: kibana
+  become: yes
+  tags:
+    - kibana
+
+- name: creating log directory for kibana
+  file:
+    path: "{{ kb_log_path }}"
+    state: directory
+    owner: kibana
+    group: kibana
+  become: yes
+  when: kb_log_path is defined
+  tags:
+    - kibana
+
 - name: Installing Plugins
   command: "/usr/share/kibana/bin/kibana-plugin install {{ item }}"
   with_items: "{{ kb_plugins }}"
