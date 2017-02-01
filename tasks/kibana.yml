@@ -54,6 +54,24 @@
   tags:
     - kibana
 
+- name: Get list of installed Kibana plugins
+  command: /usr/share/kibana/bin/kibana-plugin list
+  register: kb_installed_plugins
+  when: kb_install_plugins
+  become: yes
+
+- name: Uninstall plugins for upgrade
+  command: "/usr/share/kibana/bin/kibana-plugin remove {{ item }}"
+  with_items: "{{ kb_plugins }}"
+  when: kb_install_plugins and item in kb_installed_plugins.stdout_lines
+  become: yes
+
+- name: Install/Upgrade plugins
+  command: "/usr/share/kibana/bin/kibana-plugin install {{ item }}"
+  with_items: "{{ kb_plugins }}"
+  when: kb_install_plugins
+  become: yes
+
 - name: starting kibana
   service:
     name: kibana
