@@ -69,11 +69,12 @@
   when: ls_install_plugins
 
 - name: Upgrade existing plugins
-  command: ./bin/logstash-plugin install {{ item }}
+  command: ./bin/logstash-plugin update {{ item }}
   args:
     chdir: /usr/share/logstash
   with_items: "{{ ls_plugins }}"
   when: ls_install_plugins and item in ls_installed_plugins.stdout_lines
+  become: yes
 
 - name: Install new Logstash plugins
   command: ./bin/logstash-plugin install {{ item }}
