@@ -31,6 +31,7 @@
     owner: logstash
     group: logstash
   with_items:
+    - "{{ ls_yml['path.base'] }}"
     - "{{ ls_yml['path.data'] }}"
     - "{{ ls_yml['path.config'] }}"
     - "{{ ls_yml['path.logs'] }}"
