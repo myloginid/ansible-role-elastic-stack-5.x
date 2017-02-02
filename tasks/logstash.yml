@@ -159,7 +159,7 @@
 - name: starting logstash
   service:
     name: logstash
-    state: started
+    state: restarted
     enabled: yes
   become: yes
   tags:

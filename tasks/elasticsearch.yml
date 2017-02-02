@@ -71,7 +71,7 @@
 - name: starting elasticsearch
   service:
     name: elasticsearch
-    state: started
+    state: restarted
     enabled: yes
   become: yes
   tags:
