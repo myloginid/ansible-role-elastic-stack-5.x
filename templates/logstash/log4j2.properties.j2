@@ -26,3 +26,5 @@ appender.json_rolling.layout.eventEol = true
 
 rootLogger.level = ${sys:ls.log.level}
 rootLogger.appenderRef.rolling.ref = ${sys:ls.log.format}_rolling
+
+{{ ls_additional_log4j_directives | default('') }}
