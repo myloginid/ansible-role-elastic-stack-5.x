@@ -48,6 +48,7 @@ ls_provisional_files: []
 ls_install_geoip: no
 ls_plugins: []
 ls_install_plugins: yes
+ls_additional_log4j_directives: ~
 
 ls_yml:
   path.base: /etc/logstash
