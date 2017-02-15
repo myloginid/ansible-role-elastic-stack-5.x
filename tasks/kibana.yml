@@ -2,10 +2,10 @@
 
 - name: installing kibana
   apt:
-    name: kibana={{ db_version }}
+    name: kibana={{ kb_version }}
     state: present
   become: yes
-  when: kb_version
+  when: kb_version is defined
   tags:
     - kibana
 
@@ -14,7 +14,7 @@
     name: kibana
     state: latest
   become: yes
-  when: not kb_version
+  when: kb_version is undefined
   tags:
     - kibana
 
@@ -61,9 +61,9 @@
   become: yes
 
 - name: Uninstall plugins for upgrade
-  command: "/usr/share/kibana/bin/kibana-plugin remove {{ item }}"
-  with_items: "{{ kb_plugins }}"
-  when: kb_install_plugins and item in kb_installed_plugins.stdout_lines
+  command: "/usr/share/kibana/bin/kibana-plugin remove {{ item.split('@')[0] }}"
+  with_items: "{{ kb_installed_plugins.stdout_lines }}"
+  when: kb_install_plugins
   become: yes
 
 - name: Install/Upgrade plugins
