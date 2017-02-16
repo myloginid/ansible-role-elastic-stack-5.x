@@ -11,7 +11,7 @@
     name: logstash={{ ls_version }}
     state: present
   become: yes
-  when: ls_version
+  when: ls_version is defined and ls_version
   tags:
     - logstash
 
@@ -20,7 +20,7 @@
     name: logstash
     state: latest
   become: yes
-  when: not ls_version
+  when: ls_version is undefined or not ls_version
   tags:
     - logstash
 
