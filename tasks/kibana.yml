@@ -5,7 +5,7 @@
     name: kibana={{ kb_version }}
     state: present
   become: yes
-  when: kb_version is defined
+  when: kb_version is defined and kb_version
   tags:
     - kibana
 
@@ -14,7 +14,7 @@
     name: kibana
     state: latest
   become: yes
-  when: kb_version is undefined
+  when: kb_version is undefined or not kb_version
   tags:
     - kibana
 

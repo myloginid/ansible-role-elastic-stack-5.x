@@ -5,7 +5,7 @@
     name: elasticsearch={{ es_version }}
     state: present
   become: yes
-  when: es_version is defined
+  when: es_version is defined and es_version
   tags:
     - elasticsearch
 
@@ -14,7 +14,7 @@
     name: elasticsearch
     state: latest
   become: yes
-  when: es_version is undefined
+  when: es_version is undefined or not es_version
   tags:
     - elasticsearch
 
