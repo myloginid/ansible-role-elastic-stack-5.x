@@ -18,6 +18,13 @@
   tags:
     - kibana
 
+- name: Change Kibana service to create /var/run/kibana.pid on start (bugfix)
+  lineinfile:
+    dest: /etc/init.d/kibana
+    line: '  touch $pidfile && chown $user:$group $pidfile'
+    insertafter: '^\s*# Setup any environmental stuff beforehand$'
+  become: yes
+
 - name: configuring kibana
   template:
     src: "{{ item.src }}"
@@ -65,14 +72,6 @@
 - name: Ensure correct permissions on kibana log
   file:
     path: "{{ kb_yml['logging.dest'] }}"
-    state: touch
-    owner: kibana
-    group: kibana
-  become: yes
-
-- name: creating pid file for kibana
-  file:
-    path: "{{ kb_yml['pid.file'] }}"
     state: touch
     owner: kibana
     group: kibana
