@@ -18,12 +18,31 @@
   tags:
     - kibana
 
-- name: Change Kibana service to create /var/run/kibana.pid on start (bugfix)
-  lineinfile:
+- name: Updating kibana service to properly initialize kibana.pid (Bugfix)
+  stat:
+    path: /etc/init.d/kibana
+  register: etc_initd
+
+- stat:
+    path: /etc/systemd/system/kibana.service
+  register: systemd_service
+
+- lineinfile:
     dest: /etc/init.d/kibana
     line: '  touch $pidfile && chown $user:$group $pidfile'
     insertafter: '^\s*# Setup any environmental stuff beforehand$'
   become: yes
+  when: etc_initd.stat.exists
+
+- blockinfile:
+    dest: /etc/systemd/system/kibana.service
+    block: |
+      PermissionsStartOnly=true
+      ExecStartPre=/bin/touch {{ kb_yml['pid.file'] }}
+      ExecStartPre=/bin/chown kibana:kibana {{ kb_yml['pid.file'] }}
+    insertafter: '^\[Service\]'
+  become: yes
+  when: systemd_service
 
 - name: configuring kibana
   template:
