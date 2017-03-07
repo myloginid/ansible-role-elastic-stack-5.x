@@ -42,7 +42,11 @@
       ExecStartPre=/bin/chown kibana:kibana {{ kb_yml['pid.file'] }}
     insertafter: '^\[Service\]'
   become: yes
-  when: systemd_service
+  when: systemd_service.stat.exists
+
+- command: systemctl daemon-reload
+  become: yes
+  when: systemd_service.stat.exists
 
 - name: configuring kibana
   template:
