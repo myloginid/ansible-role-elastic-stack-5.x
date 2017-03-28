@@ -82,7 +82,7 @@
 
 - name: Uninstall plugins for upgrade
   command: "/usr/share/kibana/bin/kibana-plugin remove {{ item.split('@')[0] }}"
-  with_items: "{{ kb_installed_plugins.stdout_lines }}"
+  with_items: "{{ kb_installed_plugins.get('stdout_lines', None) }}"
   when: kb_install_plugins
   become: yes
 
