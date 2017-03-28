@@ -21,6 +21,9 @@ es_install_plugins: yes
 es_yml:
   cluster.name: elasticsearch
   node.name: "{{ ansible_hostname }}"
+  node.master: "true"
+  node.data: "true"
+  node.ingest: "false"
   node.attr.rack: ~
   path.data: /var/lib/elasticsearch
   path.logs: /var/log/elasticsearch

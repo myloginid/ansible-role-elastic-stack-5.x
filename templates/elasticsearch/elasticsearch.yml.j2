@@ -9,6 +9,9 @@ cluster.name: {{ es_yml['cluster.name'] }}
 {% if es_yml['node.name'] -%}
 # ------------------------------------ Node ------------------------------------
 node.name: {{ es_yml['node.name'] }}
+node.master: {{ es_yml['node.master'] }}
+node.data: {{ es_yml['node.data'] }}
+node.ingest: {{ es_yml['node.ingest'] }}
 {% if es_yml['node.attr.rack'] -%}
 node.attr.rack: {{ es_yml['node.attr.rack'] }}
 {%- endif %}
