@@ -24,7 +24,7 @@
   register: etc_initd
 
 - stat:
-    path: /etc/systemd/system/kibana.service
+    path: /bin/systemctl
   register: systemd_service
 
 - lineinfile:
@@ -44,7 +44,9 @@
   become: yes
   when: systemd_service.stat.exists
 
-- command: systemctl daemon-reload
+- systemd:
+    name: kibana.service
+    daemon_reload: yes
   become: yes
   when: systemd_service.stat.exists
 
