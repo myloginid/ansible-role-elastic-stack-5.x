@@ -47,6 +47,7 @@
 - systemd:
     name: kibana.service
     daemon_reload: yes
+    enabled: yes
   become: yes
   when: systemd_service.stat.exists
 
