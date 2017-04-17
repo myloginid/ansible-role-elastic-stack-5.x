@@ -262,7 +262,7 @@ kb_yml:
   elasticsearch.shardTimeout: 0
   elasticsearch.startupTimeout: 5000
   pid.file: /var/run/kibana.pid
-  logging.dest: /var/log/kibana/kibana.yml
+  logging.dest: /var/log/kibana/kibana.log
   logging.silent: "false"
   logging.quiet: "false"
   logging.verbose: "false"
