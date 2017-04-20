@@ -63,6 +63,7 @@ ls_yml:
   pipeline.batch.delay: 5
   pipeline.unsafe_shutdown: "false"
   path.config: /etc/logstash/conf.d
+  path.geoipconfig: /etc/GeoIP.conf
   config.string: ""
   config.test_and_exit: "false"
   config.reload.automatic: "false"

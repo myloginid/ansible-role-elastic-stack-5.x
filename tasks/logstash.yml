@@ -119,6 +119,27 @@
   become_user: logstash
   when: ls_install_geoip and geolitecity_dat_gz.stat.exists
 
+- name: Download GeoIP Update
+  apt_repository: repo='ppa:maxmind/ppa'
+  become: yes
+
+- name: Update apt
+  apt: upgrade=yes
+  become: yes
+  become_user: root
+
+- name: install geoipupdate
+  apt: name='geoipupdate'
+  become: yes
+
+- name: copy geoipupdate config
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - {src: "{{ role_path }}/files/GeoIP.conf", dest: "{{ ls_yml['path.geoipconfig'] }}"}
+  become: yes
+
 - name: copying user supplied confd templates
   template:
     src: "{{ item }}"
