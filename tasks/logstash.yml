@@ -186,9 +186,9 @@
 - name: add cron
   cron:
     name: update_geoip
-    weekday: 1
-    minute: "0"
-    hour: "8"
+    weekday: "{{ ls_yml['config.geoipupdate_weekday'] }}"
+    hour: "{{ ls_yml['config.geoipupdate_hour'] }}"
+    minute: "{{ ls_yml['config.geoipupdate_minute'] }}"
     job: sudo /usr/bin/geoipupdate -v -f /etc/GeoIP.conf
 
 - name: starting logstash
