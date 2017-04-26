@@ -183,9 +183,10 @@
     weekday: "{{ ls_yml['config.geoipupdate_weekday'] }}"
     hour: "{{ ls_yml['config.geoipupdate_hour'] }}"
     minute: "{{ ls_yml['config.geoipupdate_minute'] }}"
-    job: "sudo /usr/bin/geoipupdate -v -f {{ ls_yml['path.geoipconfig'] }}"
+    job: "/usr/bin/geoipupdate -v -f {{ ls_yml['path.geoipconfig'] }}"
+  become: yes
   when: ls_install_geoip
-  
+
 - name: starting logstash
   service:
     name: logstash
