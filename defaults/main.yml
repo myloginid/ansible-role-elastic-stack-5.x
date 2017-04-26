@@ -70,9 +70,9 @@ ls_yml:
   config.reload.interval: 3
   config.debug: "false"
   config.geoipupdate_month: "*"
-  config.geoipupdate_weekday: "*"
-  config.geoipupdate_hour: "*"
-  config.geoipupdate_minute: "*"
+  config.geoipupdate_weekday: "3"
+  config.geoipupdate_hour: "5"
+  config.geoipupdate_minute: "0"
   queue.type: memory
   path.queue: /var/lib/logstash/queue
   queue.page_capacity: 250mb
