@@ -119,26 +119,6 @@
   become_user: logstash
   when: ls_install_geoip and geolitecity_dat_gz.stat.exists
 
-- name: download maxmind ppa
-  apt_repository:
-    repo: ppa:maxmind/ppa
-  become: yes
-  when: ls_install_geoip
-
-- name: install geoipupdate
-  apt:
-    name: geoipupdate
-    update_cache: yes
-  become: yes
-  when: ls_install_geoip
-
-- name: copy geoipupdate config
-  copy:
-    src: "{{ role_path }}/files/GeoIP.conf"
-    dest: "{{ ls_yml['path.geoipconfig'] }}"
-  become: yes
-  when: ls_install_geoip
-
 - name: copying user supplied confd templates
   template:
     src: "{{ item }}"
@@ -176,16 +156,6 @@
   command: /usr/share/logstash/bin/system-install
   become: yes
   become_user: logstash
-
-- name: add cron job for geoipupdate
-  cron:
-    name: update_geoip
-    weekday: "{{ ls_yml['config.geoipupdate_weekday'] }}"
-    hour: "{{ ls_yml['config.geoipupdate_hour'] }}"
-    minute: "{{ ls_yml['config.geoipupdate_minute'] }}"
-    job: "/usr/bin/geoipupdate -v -f {{ ls_yml['path.geoipconfig'] }}"
-  become: yes
-  when: ls_install_geoip
 
 - name: starting logstash
   service:
