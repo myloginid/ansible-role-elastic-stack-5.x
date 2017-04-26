@@ -1,0 +1,14 @@
+- name: Get Monitoring App
+  git:
+    repo: "{{ es_yml['monitor.repo_path'] }}"
+    dest: "{{ es_yml['path.monitor'] }}"
+    version: dev
+    accept_hostkey: yes
+  when: es_install_mapping_monitor and install_python and install_git
+
+- name: installing python dependancies for monitoring app
+  pip:
+    requirements: "{{ es_yml['path.monitor'] }}/requirements.txt"
+    virtualenv: "{{ es_yml['path.monitor'] }}/venv"
+    virtualenv_python: python3.6
+  when: es_install_mapping_monitor and install_python and install_git

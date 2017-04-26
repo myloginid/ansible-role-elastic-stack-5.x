@@ -15,6 +15,9 @@
 - include: python.yml
   when: install_python
 
+- include: es-monitor.yml
+  when: es_install_mapping_monitor
+
 - include: logstash.yml
   when: install_logstash
 

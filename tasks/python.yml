@@ -19,12 +19,6 @@
     executable: pip3
   become: yes
 
-- name: installing python dependancies
-  pip:
-    requirements: "{{ es_yml['path.monitor'] }}/requirements.txt"
-    virtualenv: "{{ es_yml['path.monitor'] }}/venv"
-    virtualenv_python: python3.6
-
 # sudo add-apt-repository ppa:fkrull/deadsnakes
 # sudo apt-get update
 # sudo apt-get install python3.6
