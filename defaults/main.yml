@@ -4,10 +4,10 @@
 install_java: no
 
 # python stuff
-install_python: yes
+install_python: no
 
 # git stuff
-install_git: yes
+install_git: no
 
 
 # elastic general stuff
@@ -78,10 +78,6 @@ ls_yml:
   config.reload.automatic: "false"
   config.reload.interval: 3
   config.debug: "false"
-  config.geoipupdate_month: "*"
-  config.geoipupdate_weekday: "*"
-  config.geoipupdate_hour: "*"
-  config.geoipupdate_minute: "*"
   queue.type: memory
   path.queue: /var/lib/logstash/queue
   queue.page_capacity: 250mb
