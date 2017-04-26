@@ -1,0 +1,30 @@
+- name: download deadsnakes ppa
+  apt_repository:
+    repo: ppa:fkrull/deadsnakes
+  become: yes
+
+- name: installing python
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - python3.6
+    - python3-pip
+  become: yes
+
+- name: installing virtualenv
+  pip:
+    name: virtualenv
+    executable: pip3
+  become: yes
+
+- name: installing python dependancies
+  pip:
+    requirements: "{{ es_yml['path.monitor'] }}/requirements.txt"
+    virtualenv: "{{ es_yml['path.monitor'] }}/venv"
+    virtualenv_python: python3.6
+
+# sudo add-apt-repository ppa:fkrull/deadsnakes
+# sudo apt-get update
+# sudo apt-get install python3.6

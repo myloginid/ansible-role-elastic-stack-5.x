@@ -3,11 +3,17 @@
 - include: java.yml
   when: install_java
 
+- include: git.yml
+  when: install_git
+
 - include: elastic-apt.yml
   when: install_elasticsearch or install_logstash or install_filebeat or install_kibana
 
 - include: elasticsearch.yml
   when: install_elasticsearch
+
+- include: python.yml
+  when: install_python
 
 - include: logstash.yml
   when: install_logstash

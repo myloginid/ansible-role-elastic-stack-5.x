@@ -31,6 +31,16 @@
   tags:
     - elasticsearch
 
+- name: create monitoring app path
+  file:
+    path: "{{ es_yml['path.monitor'] }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  become: yes
+  when: es_install_mapping_monitor
+
+
 - name: configuring elasticsearch
   template:
     src: "{{ item.src }}"
@@ -55,6 +65,14 @@
   register: installed_plugin_list
   become: yes
   when: es_install_plugins
+
+- name: Get Monitoring App
+  git:
+    repo: "{{ es_yml['monitor.repo_path'] }}"
+    dest: "{{ es_yml['path.monitor'] }}"
+    version: dev
+    accept_hostkey: yes
+  when: es_install_mapping_monitor and install_python and install_git
 
 - name: Uninstall plugins that need to be updated
   command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove {{ item }}
