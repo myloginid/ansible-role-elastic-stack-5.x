@@ -64,6 +64,7 @@ ls_yml:
   pipeline.unsafe_shutdown: "false"
   path.config: /etc/logstash/conf.d
   path.geoipconfig: /etc/GeoIP.conf
+  path.geodb: /etc/logstash/geodb
   config.string: ""
   config.test_and_exit: "false"
   config.reload.automatic: "false"
