@@ -5,7 +5,7 @@ LicenseKey 000000000000
 # The remaining settings are OPTIONAL.
 
 # The directory to store the database files. Defaults to /usr/local/share/GeoIP
-DatabaseDirectory /etc/logstash/geodb
+DatabaseDirectory {{ ls_yml['path.geodb'] }}
 
 # Include one or more of the following ProductIds:
 # * GeoLite2-City - GeoLite 2 City

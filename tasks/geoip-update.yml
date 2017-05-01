@@ -10,8 +10,8 @@
   become: yes
 
 - name: copy geoipupdate config
-  copy:
-    src: "{{ role_path }}/files/GeoIP.conf"
+  template:
+    src: "{{ role_path }}/templates/GeoIP.conf.j2"
     dest: "{{ ls_yml['path.geoipconfig'] }}"
   become: yes
 
