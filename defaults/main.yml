@@ -63,11 +63,17 @@ ls_yml:
   pipeline.batch.delay: 5
   pipeline.unsafe_shutdown: "false"
   path.config: /etc/logstash/conf.d
+  path.geoipconfig: /etc/GeoIP.conf
+  path.geodb: /etc/logstash/geodb
   config.string: ""
   config.test_and_exit: "false"
   config.reload.automatic: "false"
   config.reload.interval: 3
   config.debug: "false"
+  config.geoipupdate_month: "*"
+  config.geoipupdate_weekday: "3"
+  config.geoipupdate_hour: "5"
+  config.geoipupdate_minute: "0"
   queue.type: memory
   path.queue: /var/lib/logstash/queue
   queue.page_capacity: 250mb

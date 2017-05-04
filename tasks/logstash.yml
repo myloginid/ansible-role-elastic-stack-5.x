@@ -87,7 +87,7 @@
 
 - name: Create geodb directory
   file:
-    path: /etc/logstash/geodb
+    path: "{{ ls_yml['path.geodb'] }}"
     state: directory
     owner: logstash
     group: logstash
@@ -98,7 +98,7 @@
 - name: Download GeoIP database files
   get_url:
     url: "{{ item }}"
-    dest: /etc/logstash/geodb
+    dest: "{{ ls_yml['path.geodb'] }}"
     owner: logstash
     group: logstash
     force: yes
@@ -107,14 +107,14 @@
   become: yes
   when: ls_install_geoip
 
-- stat: path=/etc/logstash/geodb/GeoLite2-City.mmdb.gz
+- stat: path="{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb.gz"
   register: geolitecity_dat_gz
   when: ls_install_geoip
-- file: path=/etc/logstash/geodb/GeoLite2-City.mmdb state=absent
+- file: path="{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb" state=absent
   become: yes
   when: ls_install_geoip
 - name: Unarchive GeoLite2-City.mmdb.gz if present
-  command: gunzip /etc/logstash/geodb/GeoLite2-City.mmdb.gz
+  command: gunzip "{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb.gz"
   become: yes
   become_user: logstash
   when: ls_install_geoip and geolitecity_dat_gz.stat.exists
