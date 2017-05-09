@@ -1,6 +1,6 @@
 ---
 
-- name: installing elasticsearch
+- name: installing elasticsearch with version defined
   apt:
     name: elasticsearch={{ es_version }}
     state: present
@@ -9,7 +9,7 @@
   tags:
     - elasticsearch
 
-- name: installing elasticsearch
+- name: installing elasticsearch without version defined - default: latest
   apt:
     name: elasticsearch
     state: latest

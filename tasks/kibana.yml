@@ -1,6 +1,6 @@
 ---
 
-- name: installing kibana
+- name: installing kibana with version defined
   apt:
     name: kibana={{ kb_version }}
     state: present
@@ -9,7 +9,7 @@
   tags:
     - kibana
 
-- name: installing kibana
+- name: installing kibana without version defined - default: latest
   apt:
     name: kibana
     state: latest
