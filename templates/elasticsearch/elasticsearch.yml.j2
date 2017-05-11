@@ -43,3 +43,8 @@ gateway.recover_after_nodes: {{ es_yml['gateway.recover_after_nodes'] }}
 
 # ---------------------------------- Various -----------------------------------
 action.destructive_requires_name: {{ es_yml['action.destructive_requires_name'] }}
+
+{% if es_yml['extra_config'] %}
+# ------------------------------ Miscellaneous ---------------------------------
+{{ es_yml['extra_config'] | to_yaml }}
+{% endif %}
