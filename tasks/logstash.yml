@@ -16,7 +16,7 @@
   tags:
     - logstash
 
-- name: installing logstash without version defined - default: latest
+- name: installing logstash without version defined (default latest)
   apt:
     name: logstash
     state: latest

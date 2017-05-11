@@ -9,7 +9,7 @@
   tags:
     - kibana
 
-- name: installing kibana without version defined - default: latest
+- name: installing kibana without version defined (default latest)
   apt:
     name: kibana
     state: latest
