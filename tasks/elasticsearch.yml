@@ -9,7 +9,7 @@
   tags:
     - elasticsearch
 
-- name: installing elasticsearch without version defined - default: latest
+- name: installing elasticsearch without version defined (default to latest)
   apt:
     name: elasticsearch
     state: latest
