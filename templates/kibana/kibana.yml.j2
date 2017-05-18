@@ -32,7 +32,7 @@ elasticsearch.ssl.ca: {{ kb_yml['elasticsearch.ssl.ca'] }}
 {%- endif %}
 
 {% if kb_yml['elasticsearch.ssl.verify'] is defined -%}
-elasticsearch.ssl.verify: {{ kb_yml['elasticsearch.ssl.verify'] }}
+elasticsearch.ssl.verify: {{ 'true' if kb_yml['elasticsearch.ssl.verify'] else 'false' }}
 {%- endif %}
 
 elasticsearch.pingTimeout: {{ kb_yml['elasticsearch.pingTimeout'] }}
