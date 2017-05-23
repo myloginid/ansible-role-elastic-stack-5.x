@@ -31,9 +31,9 @@ elasticsearch.ssl.verify: {{ kb_yml['elasticsearch.ssl.verify'] }}
 
 elasticsearch.pingTimeout: {{ kb_yml['elasticsearch.pingTimeout'] }}
 elasticsearch.requestTimeout: {{ kb_yml['elasticsearch.requestTimeout'] }}
-{% if kb_yml['elasticsearch.requestHeadersWhitelist'] -%}
+{% if kb_yml['elasticsearch.requestHeadersWhitelist'] %}
 elasticsearch.requestHeadersWhitelist: {{ kb_yml['elasticsearch.requestHeadersWhitelist'] }}
-{%- endif %}
+{% endif %}
 elasticsearch.customHeaders: {{ kb_yml['elasticsearch.customHeaders'] }}
 elasticsearch.shardTimeout: {{ kb_yml['elasticsearch.shardTimeout'] }}
 elasticsearch.startupTimeout: {{ kb_yml['elasticsearch.startupTimeout'] }}
