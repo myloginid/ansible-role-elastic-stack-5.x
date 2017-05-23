@@ -69,23 +69,25 @@
     chdir: /usr/share/logstash
   register: ls_installed_plugins
   become: yes
-  when: ls_install_plugins
+  when: ls_install_plugins | bool
 
 - name: Upgrade existing plugins
-  command: ./bin/logstash-plugin update {{ item }}
+  command: "./bin/logstash-plugin update {{ item }}"
   args:
     chdir: /usr/share/logstash
   with_items: "{{ ls_plugins }}"
-  when: ls_install_plugins and item in ls_installed_plugins.stdout_lines
+  when: (ls_install_plugins | bool) and item in ls_installed_plugins.stdout_lines
   become: yes
+  environment: "{{ proxy_environment_variables }}"
 
 - name: Install new Logstash plugins
-  command: ./bin/logstash-plugin install {{ item }}
+  command: "./bin/logstash-plugin install {{ item }}"
   args:
     chdir: /usr/share/logstash
   with_items: "{{ ls_plugins }}"
   become: yes
-  when: ls_install_plugins and item not in ls_installed_plugins.stdout_lines
+  when: (ls_install_plugins | bool) and item not in ls_installed_plugins.stdout_lines
+  environment: "{{ proxy_environment_variables }}"
 
 - name: Create geodb directory
   file:
@@ -95,7 +97,13 @@
     group: logstash
     mode: 0755
   become: yes
-  when: ls_install_geoip
+  when: ls_install_geoip | bool
+
+- name: Check if GeoIP db missing
+  stat:
+    path: "{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb"
+  register: geo_db_stat
+  become: yes
 
 - name: Download GeoIP database files
   get_url:
@@ -107,19 +115,17 @@
   with_items:
     - "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz"
   become: yes
-  when: ls_install_geoip
+  when: (ls_install_geoip | bool) and not geo_db_stat.stat.exists
 
-- stat: path="{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb.gz"
-  register: geolitecity_dat_gz
-  when: ls_install_geoip
-- file: path="{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb" state=absent
-  become: yes
-  when: ls_install_geoip
 - name: Unarchive GeoLite2-City.mmdb.gz if present
   command: gunzip "{{ ls_yml['path.geodb'] }}/GeoLite2-City.mmdb.gz"
   become: yes
   become_user: logstash
-  when: ls_install_geoip and geolitecity_dat_gz.stat.exists
+  when: (ls_install_geoip | bool) and not geo_db_stat.stat.exists
+
+- name: Install GeoDB autoupdate
+  include: geoip-update.yml
+  when: (ls_install_geoip | bool)
 
 - name: copying user supplied confd templates
   template:

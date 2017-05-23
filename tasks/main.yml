@@ -12,9 +12,6 @@
 - include: logstash.yml
   when: install_logstash
 
-- include: geoip-update.yml
-  when: ls_install_geoip
-
 - include: filebeat.yml
   when: install_filebeat
 

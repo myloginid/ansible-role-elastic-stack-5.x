@@ -46,3 +46,8 @@ path.logs: {{ ls_yml['path.logs'] }}
 
 # ------------ Other Settings --------------
 path.plugins: {{ ls_yml['path.plugins'] }}
+
+{% if ls_yml['extra_config'] %}
+# ------------------------------ Miscellaneous ---------------------------------
+{{ ls_yml['extra_config'] | to_yaml }}
+{% endif %}
