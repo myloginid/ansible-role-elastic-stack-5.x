@@ -80,19 +80,19 @@
 - name: Get list of installed Kibana plugins
   command: /usr/share/kibana/bin/kibana-plugin list
   register: kb_installed_plugins
-  when: kb_install_plugins
+  when: kb_install_plugins | bool
   become: yes
 
 - name: Uninstall plugins for upgrade
   command: "/usr/share/kibana/bin/kibana-plugin remove {{ item.split('@')[0] }}"
   with_items: "{{ kb_installed_plugins.get('stdout_lines', None) }}"
-  when: kb_install_plugins
+  when: kb_install_plugins | bool
   become: yes
 
 - name: Install/Upgrade plugins
   command: "/usr/share/kibana/bin/kibana-plugin install {{ item }}"
   with_items: "{{ kb_plugins }}"
-  when: kb_install_plugins
+  when: kb_install_plugins | bool
   become: yes
 
 - name: Ensure correct permissions on kibana log

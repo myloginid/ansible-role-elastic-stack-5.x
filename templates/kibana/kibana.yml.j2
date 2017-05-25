@@ -25,8 +25,14 @@ server.ssl.key: {{ kb_yml['server.ssl.key'] }}
 {% if kb_yml['elasticsearch.ssl.cert'] -%}
 elasticsearch.ssl.cert: {{ kb_yml['elasticsearch.ssl.cert'] }}
 elasticsearch.ssl.key: {{ kb_yml['elasticsearch.ssl.key'] }}
+{%- endif %}
+
+{% if kb_yml['elasticsearch.ssl.ca'] -%}
 elasticsearch.ssl.ca: {{ kb_yml['elasticsearch.ssl.ca'] }}
-elasticsearch.ssl.verify: {{ kb_yml['elasticsearch.ssl.verify'] }}
+{%- endif %}
+
+{% if kb_yml['elasticsearch.ssl.verify'] is defined -%}
+elasticsearch.ssl.verify: {{ 'true' if kb_yml['elasticsearch.ssl.verify'] else 'false' }}
 {%- endif %}
 
 elasticsearch.pingTimeout: {{ kb_yml['elasticsearch.pingTimeout'] }}

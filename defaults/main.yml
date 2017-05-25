@@ -89,6 +89,7 @@ ls_yml:
   path.logs: /var/log/logstash
   path.plugins: []
   path.index_templates: /etc/logstash/index_templates
+  extra_config: ~
 
 ls_startup_opts:
   java_opts: "-Xms{{ ls_min_heap_size }} -Xmx{{ ls_max_heap_size }} -XX:MaxPermSize"
